@@ -5,6 +5,7 @@ const keys = require("./keys");
 const axios = require("axios");
 const moment = require("moment");
 const spotify = new Spotify(keys.spotify);
+const fs = require('fs');
 
 
 
@@ -49,13 +50,27 @@ concertThis = (artist) => {
         function(response) {
             console.log(response.data[0].venue.name);
             console.log(response.data[0].venue.city + ', ' + response.data[0].venue.region);
-            console.log(response.data[0].datetime);
+            console.log(moment(response.data[0].datetime).format('MM/DD/YYYY'));
         }
     );
 }
 
-// spotifyThisSong(process.argv[2]);
+doWhatItSays = () => {
+    fs.readFile("./random.txt", "utf8", function(err, data) {
+        if(err) {
+            return console.log(err);
+        }
 
+        console.log(data);
+
+        var dataArr = data.split(",");
+
+        console.log(dataArr);
+    })
+}
+
+// spotifyThisSong(process.argv[2]);
+// console.log(moment());
 switch(process.argv[2]) {
     case 'spotify-this-song':
         spotifyThisSong(process.argv[3])
@@ -67,5 +82,9 @@ switch(process.argv[2]) {
     
     case 'concert-this':
         concertThis(process.argv[3])
+    break;
+
+    case 'do-what-it-says':
+        doWhatItSays();
     break;
 }
