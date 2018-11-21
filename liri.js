@@ -12,7 +12,9 @@ const fs = require('fs');
 spotifyThisSong = (songName) => {
     spotify.search({ type: 'track', query: songName }, function(err, data) {
         if (err) {
-          return console.log('Error occurred: ' + err);
+        //   return console.log('Error occurred: ' + err);
+            process.argv[3] = "The Sign";
+            liri();
         }
        
       console.log("Artist: " + data.tracks.items[0].album.artists[0].name);
@@ -61,30 +63,36 @@ doWhatItSays = () => {
             return console.log(err);
         }
 
-        console.log(data);
+        // console.log(data);
 
         var dataArr = data.split(",");
-
-        console.log(dataArr);
+        process.argv[2] = dataArr[0];
+        process.argv[3] = dataArr[1];
+        liri();
+        // console.log(dataArr);
     })
 }
 
 // spotifyThisSong(process.argv[2]);
 // console.log(moment());
-switch(process.argv[2]) {
-    case 'spotify-this-song':
-        spotifyThisSong(process.argv[3])
-    break;
+liri = () => {
+    switch(process.argv[2]) {
+        case 'spotify-this-song':
+            spotifyThisSong(process.argv[3])
+        break;
+        
+        case 'movie-this':
+            movieThis(process.argv[3])
+        break;
+        
+        case 'concert-this':
+            concertThis(process.argv[3])
+        break;
     
-    case 'movie-this':
-        movieThis(process.argv[3])
-    break;
-    
-    case 'concert-this':
-        concertThis(process.argv[3])
-    break;
-
-    case 'do-what-it-says':
-        doWhatItSays();
-    break;
+        case 'do-what-it-says':
+            doWhatItSays();
+        break;
+    }
 }
+
+liri();
